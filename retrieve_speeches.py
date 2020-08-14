@@ -39,13 +39,17 @@ for link in links:
     link_specific = link['href']
     link_list.append("https://millercenter.org"+link_specific)
 
+link_list.append("https://millercenter.org/the-presidency/presidential-speeches/january-8-2020-statement-iran")
+link_list.append("https://millercenter.org/the-presidency/presidential-speeches/january-3-2020-remarks-killing-qasem-soleimani")
+link_list.append("https://millercenter.org/the-presidency/presidential-speeches/october-27-2019-statement-death-abu-bakr-al-baghdadi")
+link_list.append("https://millercenter.org/the-presidency/presidential-speeches/september-25-2019-press-conference")
+link_list.append("https://millercenter.org/the-presidency/presidential-speeches/september-24-2019-remarks-united-nations-general-assembly")
 
 #scrape the speech#
-number = 0
 title, speech, name, date, about = ([] for i in range(5))
-for link in link_list:
+for index,link in enumerate(link_list):
     #access speech page with Selenium and load html source into Beautifulsoup#
-    driver.get(link_list[number])
+    driver.get(link_list[index])
     driver.find_elements_by_css_selector('div[class="transcript-inner"]')
     page_source = driver.page_source
     bsobject_speechpage = bs(page_source, 'lxml')
@@ -67,7 +71,6 @@ for link in link_list:
     if about_raw == empty:
         about_raw = "No info available"
     about.append(re.sub("\\n"," ",about_raw))
-    number = number + 1
 
 #save this to a dataframe and save to a csv file#
 speeches_presidents = pd.DataFrame({'name':name,'title':title,'date':date,'info':about,'speech':speech}, columns=['name','title','date','info','speech'])
